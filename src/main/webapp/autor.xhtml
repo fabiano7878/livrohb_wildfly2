@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<!--A tag metadata serve para chamar na url o item por id  -->
+	<f:metadata>
+		<f:viewParam name="autorId" value="#{autorBean.autor.autorId}" />
+		<f:viewAction action="#{autorBean.carregaAutorPorId}"
+			if="#{param.autorId != null}" />
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel>Novo Autor</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="autor">
+			<p:messages id="messages" />
+			<p:fieldset legend="Dados do Autor" style="margin-bottom:20px">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nome:" for="nome" />
+					<p:inputText id="nome" value="#{autorBean.autor.nome}"
+						required="true" requiredMessage="O nome Autor é obrigatório"
+						validatorMessage="Nome precisa maior que 5 caracteres!">
+						<f:validateLength minimum="5" />
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+
+					<p:outputLabel value="E-mail:" for="email" />
+					<p:inputText id="email" value="#{autorBean.autor.email}"
+						required="true" requiredMessage="Email é obrigatório"
+						validatorMessage="Email invalido!">
+						<f:attribute name="type" value="email" />
+						<f:validateRegex
+							pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						<f:passThroughAttribute name="placeholder" value="E-mail do autor" />
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+
+				</h:panelGrid>
+				<p:commandButton value="Gravar" action="#{autorBean.gravar}"
+					process="@form" update="@form :formTabelaAutores" styleClass="ui-priority-primary"/>
+			</p:fieldset>
+		</h:form>
+
+		<h:form id="formTabelaAutores">
+			<p:dataTable value="#{autorBean.autores}" var="autor" rows="5" paginator="true" lazy="true">
+				<f:facet name="header">
+            	Autores
+        	</f:facet>
+				<p:column headerText="Nome" sortBy="#{autor.nome}" filterBy="#{autor.nome}" filterMatchMode="startsWith">
+					<h:outputText value="#{autor.nome}" />
+				</p:column>
+				<p:column headerText="E-mail" sortBy="#{autor.email}" filterBy="#{autor.email}" filterMatchMode="startsWith">
+					<h:outputText value="#{autor.email}" />
+				</p:column>
+				<p:column headerText="Altera">
+					<p:commandButton action="#{autorBean.carregar(autor)}"
+						update=":autor" icon="fa fa-fw fa-edit" />
+				</p:column>
+				<p:column headerText="Remover">
+					<p:commandButton action="#{autorBean.remover(autor)}" update="@all"
+						icon="fa fa-fw fa-remove" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+	<ui:define name="nomepagina">Página autor</ui:define>
+	<ui:define name="direitos">®copyright 2016</ui:define>
+</ui:composition>
+
+</html>

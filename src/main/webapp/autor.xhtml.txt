@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="autorId" value="#{autorBean.autor.autorId}" />
+		<f:viewAction action="#{autorBean.carregaAutorPorId}" if="#{param.autorId != null}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel>Novo Autor</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="autor">
+			<p:messages id="messages" />
+			<p:fieldset legend="Dados do Autor">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nome:" for="nome" />
+					<p:inputText id="nome" value="#{autorBean.autor.nome}"
+						required="true" requiredMessage="O nome Autor é obrigatório"
+						validatorMessage="Nome precisa maior que 5 caracteres!">
+						<f:validateLength minimum="5" />
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+										
+					<p:outputLabel value="E-mail:" for="email" />
+					<p:inputText id="email" value="#{autorBean.autor.email}"
+						required="true" requiredMessage="Email é obrigatório" validatorMessage="Email invalido!">
+						<f:attribute name="type" value="email"/>
+						<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"/>
+						<f:passThroughAttribute name="placeholder" value="E-mail do autor"/>
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+					
+				</h:panelGrid>
+			</p:fieldset>
+					<p:commandButton value="Gravar" action="#{autorBean.gravar}" process="@form" update="@form :formTabelaAutores:TabelasAutores"/>					
+		</h:form>
+		<h:form id="formTabelaAutores">
+		
+	<p:dataList value="#{livroBean.autores}" var="autor" type="unordered" itemType="none" paginator="true" rows="10" >
+        <p:commandLink update="formTabelaAutores:TabelasAutores" oncomplete="PF('autorDialog').show()" title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
+            <f:setPropertyActionListener value="#{autor}" target="#{livroBean.autor}" />
+            <h:outputText value="#{autor.nome}, #{autor.email}" />
+        </p:commandLink>
+        <h:outputText value="#{autor.nome}, #{autor.email}" style="display:inline-block"/>
+    </p:dataList>
+ 	
+	<p:dialog header="Tabelas Autores" widgetVar="autorDialog" modal="true" showEffect="blind" hideEffect="explode" resizable="false">
+        <p:outputPanel id="TabelasAutores" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{not empty livroBean.autor}" columnClasses="label,value">
+                <h:outputText value="Id:" />
+                <h:outputText value="#{livroBean.autor.id}" />
+ 
+                <h:outputText value="Nome:" />
+                <h:outputText value="#{livroBean.autor.nome}" />
+ 
+                <h:outputText value="E-mail:" />
+                <h:outputText value="#{livroBean.autor.email}"/>
+ 
+                <h:outputText value="Alterar" />
+                <h:outputText value="#{autorBean.carregar(livroBean.autor)}" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px"/>
+                
+                <h:outputText value="Remove" />
+                <h:outputText value="" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:20px">
+                	<p:button value="remover" onclick="#{autorBean.remover(livroBean.autor)}" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:20px"/>
+                </h:outputText>
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog>		
+			
+
+		</h:form>
+	</ui:define>
+	<ui:define name="nomepagina">Página autor</ui:define>
+	<ui:define name="direitos">®copyright 2016</ui:define>
+</ui:composition>
+
+</html>

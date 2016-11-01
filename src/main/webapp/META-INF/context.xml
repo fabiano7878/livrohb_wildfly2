@@ -1,0 +1,10 @@
+<context>
+	<resource
+        name="BeanManager"
+        description="DB2 Server DataSource"
+        auth="Container"
+        type="javax.interprise.inject.spi.BeanManager"
+        factory="org.jboss.weld.resources.ManagerObjectFactory"
+    />
+
+</context>

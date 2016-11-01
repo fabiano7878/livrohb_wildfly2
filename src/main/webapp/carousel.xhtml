@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="autorId" value="#{autorBean.autor.autorId}" />
+		<f:viewAction action="#{autorBean.carregaAutorPorId}"
+			if="#{param.autorId != null}" />
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel>Carousel</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="carousel">
+			<p:carousel value="#{livroBean.livros}" headerText="Tabela de Livros" var="livro" itemStyle="height:250px; text-align:center;" numVisible="1" easing="easeOutBounce" style="width:350px; position:absolute; left:400px" cricular="true">
+        <h:panelGrid columns="2" style="width:300px; align:center;" columnClasses="label,value" >
+            <h:outputText value="ISBN: " />
+            <h:outputText value="#{livro.isbn}" />
+ 
+            <h:outputText value="Data de Lançamento: " />
+            <h:outputText value="#{livro.dataLancamento.time}" >
+            	<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+            </h:outputText>
+ 
+            <h:outputText value="Título: " />
+            <h:outputText value="#{livro.titulo}" />
+ 
+            <h:outputText value="Preço: " />
+            <h:outputText value="R$ #{livro.preco}" style="color:red"/>
+ 
+            <f:facet name="footer">
+                <p:commandButton update="carousel:livroDetalhe" oncomplete="PF('livroDialog').show()" icon="ui-icon-search">
+                    <f:setPropertyActionListener value="#{livro}" target="#{livroBean.livro}" />
+                </p:commandButton>
+            </f:facet>
+            
+        </h:panelGrid>
+    </p:carousel>
+    <p:dialog header="Informações do Livro" widgetVar="livroDialog" modal="true" showEffect="fade" hideEffect="explode" resizable="false">
+        <p:outputPanel id="livroDetalhe" style="text-align:center;">
+            <p:panelGrid  columns="2" rendered="#{not empty livroBean.livro}" columnClasses="label,value">
+               
+                <h:outputText value="ISBN: " />
+                <h:outputText value="#{livroBean.livro.isbn}" />
+ 
+                <h:outputText value="Data de Lançamento " />
+                <h:outputText value="#{livroBean.livro.dataLancamento.time}" >
+                	<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                </h:outputText>
+ 
+                <h:outputText value="Título: " />
+                <h:outputText value="#{livroBean.livro.titulo}" />
+ 
+                <h:outputText value="Preço: " />
+                <h:outputText value="R$ #{livroBean.livro.preco}" style="color:red"/>
+                
+                
+                <h:outputText value="Autores: " />
+	           	<ui:repeat value="#{livroBean.livro.autores}" var="autor">
+                		<h:outputText value="#{autor.nome}" style="color:blue; display:block"/>
+            	</ui:repeat>
+                
+                <h:outputText value="E-mail: " />
+                <ui:repeat value="#{livroBean.livro.autores}" var="autor">
+                	<h:outputText value="#{autor.email}" style="display:block"/>
+                </ui:repeat>
+                                
+            </p:panelGrid>
+        </p:outputPanel>
+    </p:dialog> 
+		</h:form>
+	</ui:define>
+	<ui:define name="nomepagina">Página autor</ui:define>
+	<ui:define name="direitos">®copyright 2016</ui:define>
+</ui:composition>
+
+</html>

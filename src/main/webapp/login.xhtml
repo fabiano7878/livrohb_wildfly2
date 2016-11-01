@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+		<p:outputPanel>Login</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="login">
+			<p:messages id="messages" />
+			<p:fieldset legend="Login" style="margin-bottom:20px">				
+				<h:panelGrid columns="2">
+					<p:outputLabel value="E-mail:" for="email" />
+					<p:inputText id="email" value="#{loginBean.user.email}"
+						required="true" requiredMessage="Usuario é obrigatório" validatorMessage="Email invalido!">
+						<f:attribute name="type" value="email"/>
+						<f:passThroughAttribute name="placeholder" value="E-mail de login" />
+						<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]"/>					
+						<f:ajax event="blur" render="messages" />
+					</p:inputText>
+
+					<p:outputLabel value="Senha:" for="senha" />
+						<p:password id="senha" value="#{loginBean.user.senha}" feedback="true" inline="true" required="true"
+						promptLabel="Digite a sua senha" weakLabel="Fraca" goodLabel="Bom" strongLabel="Forte" requiredMessage="Digitar uma senha valida!">
+						<f:ajax event="blur" render="messages" />
+						</p:password>
+				</h:panelGrid>
+			</p:fieldset>
+			<p:commandButton value="login" action="#{loginBean.efetuaLogin}" update="@form" process="@form" render="messages" styleClass="ui-priority-primary"/>				
+		</h:form>
+	</ui:define>
+	<ui:define name="nomepagina">Página login</ui:define>
+	<ui:define name="direitos">®copyright 2016</ui:define>
+</ui:composition>
+
+</html>

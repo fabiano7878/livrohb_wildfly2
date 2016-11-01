@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head />
+
+<h:body>
+	<div id="cabecalho">
+			<h:panelGrid columns="2">
+			<p:graphicImage library="img" name="logoBossp.png" />
+			<h:form id="theme" rendered="#{usuarioLogado != null}" style="position:absolute; right:10px">
+				<p:themeSwitcher id="basic" style="width:165px" value="#{themeBean.theme}">
+					<f:selectItem itemLabel="Escolha o Tema" itemValue="" noSelectionOption="true"/>
+					<f:selectItems value="#{themeBean.temas}" var="theme" itemLabel="#{theme}" itemValue="#{theme}" />				
+					<f:ajax />
+				</p:themeSwitcher>
+			</h:form>
+			</h:panelGrid>
+		<h:panelGrid columns="2">
+		<p:growl id="messages" showDetail="true" autoUpdate="true"/>
+			<h:form id="deslogar" rendered="#{usuarioLogado != null}">
+				<p:menubar>
+					<p:submenu label="Menu" icon="fa fa-bars">
+						<p:submenu label="Novo" icon="fa fa-fw fa-edit">
+							<p:menuitem value="Livro" action="#{paginaBean.formLivro}" icon="fa fa-book"/>
+							<p:menuitem value="Autor" action="#{paginaBean.formAutor}"	icon="fa fa-user-plus"/>
+						</p:submenu>
+						<p:separator />
+						<p:submenu label="Gráficos" icon="fa fa-pie-chart">
+							<p:menuitem value="Vendas" action="#{paginaBean.formVendas}"	icon="fa fa-cart-arrow-down" />
+						</p:submenu>
+						<p:separator />
+						<p:submenu label="Novidades" icon="fa fa-bomb">
+							<p:menuitem value="Ring" action="#{paginaBean.formRing}"	icon="fa fa-bell" />
+							<p:menuitem value="Carousel" action="#{paginaBean.formCarousel}"	icon="fa fa-car" />
+						</p:submenu>
+						<p:separator />
+						<p:menuitem value="Logout" action="#{paginaBean.deslogar}" icon="fa fa-fw fa-sign-out" />
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+
+		</h:panelGrid>
+		<h1>
+			<ui:insert name="titulo"></ui:insert>
+		</h1>
+	</div>
+	<div id="conteudo">
+		<ui:insert name="conteudo"></ui:insert>
+	</div>
+	<br />
+	<br />
+	<br />
+	<div id="rodape">
+		<div align="right">
+			<ui:insert name="nomepagina"></ui:insert>
+		</div>
+		<div align="center">
+			<hr />
+			<ui:insert name="direitos"></ui:insert>
+		</div>
+	</div>
+</h:body>
+</html>
